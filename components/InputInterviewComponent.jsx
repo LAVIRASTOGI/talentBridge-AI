@@ -12,7 +12,7 @@ import {
 
 // Constants
 
-function InputInterviewComponent({ category }) {
+function InputInterviewComponent({ category, closeModal }) {
   const [isPending, setIsPending] = useState(false);
   const { user } = useUser();
   const {
@@ -27,6 +27,7 @@ function InputInterviewComponent({ category }) {
 
   const resetForm = useCallback(() => {
     reset();
+    closeModal();
   }, [reset]);
 
   useEffect(() => {
