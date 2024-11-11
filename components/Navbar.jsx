@@ -9,10 +9,10 @@ function Navbar() {
   const pathname = usePathname();
   return (
     <nav
-      className="fixed top-0 right-0 w-screen z-50 grid grid-cols-[20%_80%] px-6 py-4 
-      lg:px-10 items-center backdrop-blur-md bg-white/30 shadow-md h-20 "
+      className="fixed top-0 right-0 w-screen z-50 grid grid-cols-[20%_80%] 
+      lg:px-10 items-center backdrop-blur-md bg-white/30 shadow-md h-20 pr-4"
     >
-      <div className="gap-2 items-center">
+      <div className="gap-2 items-center pl-4">
         <Link href="/">
           <span className="text-xl font-bold">TalentBridge</span>
         </Link>
