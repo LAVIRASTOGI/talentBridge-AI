@@ -1,9 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { mockInterviewGenerate } from "@/lib/action";
 import { useUser } from "@clerk/nextjs";
 import { SkillsAutocomplete } from "./SkillsAutocomplete";
+import {
+  DEFAULT_FORM_VALUES,
+  QUESTION_FORMATS,
+  SKILL_LEVELS,
+} from "@/constant";
+
+// Constants
 
 function InputInterviewComponent({ category }) {
   const [isPending, setIsPending] = useState(false);
@@ -15,125 +22,131 @@ function InputInterviewComponent({ category }) {
     reset,
     formState: { errors, isSubmitSuccessful },
   } = useForm({
-    defaultValues: {
-      role: "",
-      description: "",
-      experience: "",
-      skillLevel: "beginner",
-      questionFormat: "conceptual",
-      skills: [],
-    },
+    defaultValues: DEFAULT_FORM_VALUES,
   });
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     reset();
-  };
+  }, [reset]);
 
   useEffect(() => {
     if (isSubmitSuccessful) {
       resetForm();
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful, resetForm]);
 
-  const onSubmit = async (data) => {
-    setIsPending(true);
-    try {
-      await mockInterviewGenerate(null, data, {
-        id: user?.id,
-      });
-      // Show success toast
-      showToast("success", "Interview data submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      showToast("error", "An error occurred while submitting the form.");
-    } finally {
-      setIsPending(false);
-    }
-  };
-
-  const showToast = (type, message) => {
+  const showToast = useCallback((type, message) => {
     const toast = document.getElementById("toast");
-    if (toast) {
-      toast.className = `alert alert-${type}`;
-      toast.textContent = message;
-      toast.style.display = "flex";
-      setTimeout(() => {
-        toast.style.display = "none";
-      }, 3000);
-    }
-  };
+    if (!toast) return;
 
-  const renderFormField = (name, label, options) => (
-    <div className="form-control w-full">
-      <label className="label font-bold">
-        <span className="label-text">{label}</span>
-      </label>
-      {options.inputType === "textarea" ? (
-        <textarea
-          className="textarea textarea-bordered h-24"
-          placeholder={options.placeholder}
-          {...register(name, options.validation)}
-        />
-      ) : (
-        <input
-          type={options.inputType || "text"}
-          placeholder={options.placeholder}
-          className="input input-bordered w-full"
-          {...register(name, options.validation)}
-        />
-      )}
-      {errors[name] && (
-        <label className="label">
-          <span className="label-text-alt text-error">
-            {errors[name].message}
-          </span>
-        </label>
-      )}
-    </div>
+    toast.className = `alert alert-${type}`;
+    toast.textContent = message;
+    toast.style.display = "flex";
+
+    const timeoutId = setTimeout(() => {
+      toast.style.display = "none";
+    }, 3000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const onSubmit = useCallback(
+    async (data) => {
+      setIsPending(true);
+      try {
+        await mockInterviewGenerate(null, data, {
+          id: user?.id,
+        });
+        showToast("success", "Interview data submitted successfully!");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        showToast("error", "An error occurred while submitting the form.");
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [user?.id, showToast]
   );
 
-  const renderRadioGroup = (name, label, options) => (
-    <div className="form-control">
-      <label className="label font-bold">
-        <span className="label-text">{label}</span>
-      </label>
-      <Controller
-        name={name}
-        control={control}
-        rules={options.validation}
-        render={({ field }) => (
-          <div className="flex flex-wrap">
-            {options.items.map((item) => (
-              <label key={item.value} className="label cursor-pointer gap-2 ">
-                <input
-                  type="radio"
-                  name={name}
-                  className="radio radio-primary"
-                  value={item.value}
-                  checked={field.value === item.value}
-                  onChange={() => field.onChange(item.value)}
-                />
-                <span className="label-text">{item.label}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      />
-      {errors[name] && (
-        <label className="label">
-          <span className="label-text-alt text-error">
-            {errors[name].message}
-          </span>
-        </label>
-      )}
-    </div>
+  const renderFormField = useMemo(
+    () => (name, label, options) =>
+      (
+        <div className="form-control w-full">
+          <label className="label font-bold">
+            <span className="label-text">{label}</span>
+          </label>
+          {options.inputType === "textarea" ? (
+            <textarea
+              className="textarea textarea-bordered h-24"
+              placeholder={options.placeholder}
+              {...register(name, options.validation)}
+            />
+          ) : (
+            <input
+              type={options.inputType || "text"}
+              placeholder={options.placeholder}
+              className="input input-bordered w-full"
+              {...register(name, options.validation)}
+            />
+          )}
+          {errors[name] && (
+            <label className="label">
+              <span className="label-text-alt text-error">
+                {errors[name].message}
+              </span>
+            </label>
+          )}
+        </div>
+      ),
+    [errors, register]
+  );
+
+  const renderRadioGroup = useMemo(
+    () => (name, label, options) =>
+      (
+        <div className="form-control">
+          <label className="label font-bold">
+            <span className="label-text">{label}</span>
+          </label>
+          <Controller
+            name={name}
+            control={control}
+            rules={options.validation}
+            render={({ field }) => (
+              <div className="flex flex-wrap">
+                {options.items.map((item) => (
+                  <label
+                    key={item.value}
+                    className="label cursor-pointer gap-2"
+                  >
+                    <input
+                      type="radio"
+                      name={name}
+                      className="radio radio-primary"
+                      value={item.value}
+                      checked={field.value === item.value}
+                      onChange={() => field.onChange(item.value)}
+                    />
+                    <span className="label-text">{item.label}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          />
+          {errors[name] && (
+            <label className="label">
+              <span className="label-text-alt text-error">
+                {errors[name].message}
+              </span>
+            </label>
+          )}
+        </div>
+      ),
+    [control, errors]
   );
 
   return (
     <div className="p-4">
-      {/* Toast */}
-      <div id="toast" className="alert hidden fixed top-4 right-4 z-50"></div>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         {renderFormField("role", "Job Role/Job Position", {
           placeholder: "Enter Job Role",
@@ -141,25 +154,14 @@ function InputInterviewComponent({ category }) {
         })}
 
         {renderRadioGroup("skillLevel", "Skill Level", {
-          items: [
-            { value: "beginner", label: "Beginner" },
-            { value: "intermediate", label: "Intermediate" },
-            { value: "advanced", label: "Advanced" },
-          ],
+          items: SKILL_LEVELS,
           validation: { required: "Skill level is required" },
         })}
+
         <SkillsAutocomplete control={control} name="skills" />
+
         {renderRadioGroup("questionFormat", "Interview Question Format", {
-          items: [
-            {
-              value: "conceptual",
-              label: "Technical Concepts & Problem Solving",
-            },
-            {
-              value: "multipleChoice",
-              label: "Multiple Choice Questions (MCQs)",
-            },
-          ],
+          items: QUESTION_FORMATS,
           validation: { required: "Please select a question format" },
         })}
 
@@ -198,16 +200,14 @@ function InputInterviewComponent({ category }) {
         <div className="py-4 flex gap-4 justify-end">
           <button
             type="submit"
-            className={`btn btn-primary text-white ${
-              isPending ? "loading" : ""
-            }`}
+            className={`btn bg-primary text-white  hover:text-white hover:bg-blue-600  disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-blue-600 disabled:text-white }`}
             disabled={isPending}
           >
             {isPending ? "Getting Data from AI..." : "Start Interview"}
           </button>
           <button
             type="button"
-            className="btn btn-outline border-primary text-primary hover:text-white hover:bg-primary"
+            className="btn btn-outline border-primary text-primary hover:text-white hover:bg-blue-600"
             onClick={resetForm}
           >
             Cancel

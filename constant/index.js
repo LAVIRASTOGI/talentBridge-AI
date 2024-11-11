@@ -26,3 +26,23 @@ export const sidebarLinks = [
     label: "About us",
   },
 ];
+
+export const QUESTION_FORMATS = [
+  { value: "conceptual", label: "Technical Concepts & Problem Solving" },
+  { value: "multipleChoice", label: "Multiple Choice Questions (MCQs)" },
+];
+
+export const SKILL_LEVELS = [
+  { value: "beginner", label: "Beginner" },
+  { value: "intermediate", label: "Intermediate" },
+  { value: "advanced", label: "Advanced" },
+];
+
+export const DEFAULT_FORM_VALUES = {
+  role: "",
+  description: "",
+  experience: "",
+  skillLevel: "beginner",
+  questionFormat: "conceptual",
+  skills: [],
+};
