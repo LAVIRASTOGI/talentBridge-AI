@@ -46,3 +46,8 @@ export const DEFAULT_FORM_VALUES = {
   questionFormat: "conceptual",
   skills: [],
 };
+
+export const QUESTION_FORMATS_MAP = {
+  conceptual: "Mixture ofTechnical Concepts & Problem Solving",
+  multipleChoice: "Multiple Choice Questions (MCQs)",
+};
