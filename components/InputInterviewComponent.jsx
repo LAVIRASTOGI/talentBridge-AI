@@ -168,8 +168,8 @@ function InputInterviewComponent({ category, closeModal, setShowToast }) {
             validation: {
               required: "Job description is required",
               minLength: {
-                value: 50,
-                message: "Description must be at least 50 characters long",
+                value: 20,
+                message: "Description must be at least 20 characters long",
               },
             },
           }

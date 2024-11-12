@@ -5,7 +5,7 @@ export function generateInterviewPrompt({
   experienceYears,
   skillLevel,
   technologies,
-  questionCount = 50,
+  questionCount = 1,
   description = "",
   questionFormat = "conceptual",
 }) {
@@ -16,7 +16,6 @@ export function generateInterviewPrompt({
   return `Generate ${questionCount} interview questions in JSON format for a ${role} role
   with ${skillLevel} skill level and ${experienceYears} years of experience. 
   The candidate should be proficient in ${techStack}.
-  Person is ${description}
   Each question should be categorized as easy, medium, or tough.
   Return the response in the following JSON format:
   ${
