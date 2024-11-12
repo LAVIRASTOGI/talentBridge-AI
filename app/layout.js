@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/contexts/ThemeProvider";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
@@ -37,17 +38,12 @@ export default function RootLayout({ children }) {
           socialButtonsVariant: "iconButton",
           logoImageUrl: "/icons/video.jpg",
         },
-        variables: {
-          colorText: "black",
-          colorPrimary: "#0E78F9",
-          colorBackground: "#faf5ff",
-          colorInputBackground: "#faf5ff",
-          colorInputText: "black",
-        },
       }}
     >
       <html lang="en">
-        <body className="bg-dark-2 text-dark-white relative">{children}</body>
+        <body className=" relative">
+          <ThemeProvider>{children}</ThemeProvider>
+        </body>
       </html>
     </ClerkProvider>
   );

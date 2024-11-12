@@ -1,0 +1,42 @@
+.cl-footer .cl-internal-1dauvpw {
+  display: none;
+}
+/* Custom styles for the sign-in page */
+.cl-card {
+  border: none !important;
+}
+
+.cl-footerAction {
+  font-size: 0.875rem !important;
+}
+.cl-logoBox {
+  display: none;
+}
+
+.cl-footerActionLink {
+  font-weight: 500 !important;
+}
+
+.cl-socialButtonsBlockButton {
+  transition: all 0.2s ease-in-out !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Optional animation for the page load */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}

@@ -27,11 +27,6 @@ export default function CustomDialogue({
             </button>
           </div>
         </div>
-
-        {/* Backdrop */}
-        <div className="modal-backdrop" onClick={closeModal}>
-          Close
-        </div>
       </div>
     </>
   );

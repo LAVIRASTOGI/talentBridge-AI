@@ -2,10 +2,21 @@
 import { FaPlus } from "react-icons/fa6";
 import CustomDialogue from "./CustomDialogue";
 import InputInterviewComponent from "./InputInterviewComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Dashboard({ title }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState({
+    isShowToast: false,
+    type: "success",
+    message: "Data Submitted",
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  }, [showToast]);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -19,7 +30,17 @@ function Dashboard({ title }) {
   );
 
   return (
-    <div className="h-[60vh]">
+    <div className="mb-24">
+      {showToast.isShowToast && (
+        <div className="toast top-4 right-10 z-50 ">
+          <div
+            className={`alert alert-${showToast.type} w-[400px]  rounded-3xl`}
+          >
+            <span>{showToast?.message}</span>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-4 items-center ">
         <h1 className="text-4xl font-bold">Dashboard</h1>
         <h2>Create and start Your {title}</h2>
@@ -35,6 +56,7 @@ function Dashboard({ title }) {
             <InputInterviewComponent
               catergory="AIMockIntereview"
               closeModal={closeModal}
+              setShowToast={setShowToast}
             />
           </CustomDialogue>
         </div>

@@ -12,7 +12,7 @@ import {
 
 // Constants
 
-function InputInterviewComponent({ category, closeModal }) {
+function InputInterviewComponent({ category, closeModal, setShowToast }) {
   const [isPending, setIsPending] = useState(false);
   const { user } = useUser();
   const {
@@ -36,21 +36,6 @@ function InputInterviewComponent({ category, closeModal }) {
     }
   }, [isSubmitSuccessful, resetForm]);
 
-  const showToast = useCallback((type, message) => {
-    const toast = document.getElementById("toast");
-    if (!toast) return;
-
-    toast.className = `alert alert-${type}`;
-    toast.textContent = message;
-    toast.style.display = "flex";
-
-    const timeoutId = setTimeout(() => {
-      toast.style.display = "none";
-    }, 3000);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
   const onSubmit = useCallback(
     async (data) => {
       setIsPending(true);
@@ -58,15 +43,23 @@ function InputInterviewComponent({ category, closeModal }) {
         await mockInterviewGenerate(null, data, {
           id: user?.id,
         });
-        showToast("success", "Interview data submitted successfully!");
+        setShowToast({
+          isShowToast: true,
+          type: "success",
+          message: "Interview data submitted successfully!",
+        });
       } catch (error) {
         console.error("Error submitting form:", error);
-        showToast("error", "An error occurred while submitting the form.");
+        setShowToast({
+          isShowToast: true,
+          type: "error",
+          message: "An error occurred while submitting the form.",
+        });
       } finally {
         setIsPending(false);
       }
     },
-    [user?.id, showToast]
+    [user?.id]
   );
 
   const renderFormField = useMemo(
@@ -201,14 +194,15 @@ function InputInterviewComponent({ category, closeModal }) {
         <div className="py-4 flex gap-4 justify-end">
           <button
             type="submit"
-            className={`btn bg-primary text-white  hover:text-white hover:bg-blue-600  disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-blue-600 disabled:text-white }`}
+            className={`btn bg-primary rounded-xl text-white  hover:text-white hover:bg-primary  hover:border-white
+               disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-primary disabled:text-white }`}
             disabled={isPending}
           >
             {isPending ? "Getting Data from AI..." : "Start Interview"}
           </button>
           <button
             type="button"
-            className="btn btn-outline border-primary text-primary hover:text-white hover:bg-blue-600"
+            className="btn btn-outline border-primary text-primary hover:text-white hover:bg-primary rounded-xl"
             onClick={resetForm}
           >
             Cancel

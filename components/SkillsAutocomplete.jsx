@@ -50,16 +50,12 @@ export const SkillsAutocomplete = ({ control, name }) => {
         rules={{ required: "Please select at least one skill" }}
         render={({ field: { value, onChange }, fieldState: { error } }) => (
           <div className="relative">
-            <div className="flex flex-wrap gap-2 p-2 border rounded-lg bg-white">
+            <div className="flex flex-wrap gap-2 p-1 border rounded-lg">
               {/* Selected Skills Tags */}
               {value.map((skill, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-1 px-2 py-1 rounded-full ${
-                    skillsValue.includes(skill)
-                      ? "bg-primary/10"
-                      : "bg-secondary/10"
-                  }`}
+                  className={`flex items-center gap-1 px-2 py-1 rounded-full bg-primary/20`}
                 >
                   <span>{skill}</span>
                   <button
@@ -80,14 +76,14 @@ export const SkillsAutocomplete = ({ control, name }) => {
                 value={inputValue}
                 onChange={(e) => handleInputChange(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, onChange, value)}
-                className="flex-1 outline-none min-w-[200px]"
+                className="flex-1 outline-none min-w-[200px] p-2 "
                 placeholder="Type to search or add custom skills..."
               />
             </div>
 
             {/* Suggestions Dropdown */}
             {suggestions.length > 0 && (
-              <ul className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto">
+              <ul className="absolute z-10 w-full bg-gray-100 text-black border rounded-lg shadow-lg max-h-60 overflow-auto">
                 {suggestions.map((skill, index) => (
                   <li
                     key={index}
