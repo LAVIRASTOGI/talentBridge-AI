@@ -9,23 +9,23 @@ export function generateInterviewPrompt({
   description = "",
   questionFormat = "conceptual",
 }) {
-  const techStack = Array.isArray(technologies)
-    ? technologies.join(", ")
-    : technologies;
+  const techStackValue = technologies ? technologies.join(", ") : "";
 
   return `Generate ${questionCount} interview questions in JSON format for a ${role} role
   with ${skillLevel} skill level and ${experienceYears} years of experience. 
-  The candidate should be proficient in ${techStack}.
+  The candidate should be proficient in ${techStackValue}.
   Each question should be categorized as easy, medium, or tough.
   Return the response in the following JSON format:
-  ${
-    questionFormat === "conceptual"
-      ? `
+  Please continue to generate ${questionCount} such interview questions according to the structure and requirements provided.
+  The questions should be a ${QUESTION_FORMATS_MAP[questionFormat]}.
+   ${
+     questionFormat === "conceptual"
+       ? `
   {
     "questions": [
       {
         "question": "question text",
-        "topic": ${techStack},
+        "topic": ${techStackValue},
         "subTopic": "Specific sub-topic here",
         "difficulty": "easy|medium|tough",
         "explanation": "detailed explanation",
@@ -33,12 +33,12 @@ export function generateInterviewPrompt({
     ]
    
   }`
-      : `
+       : `
       {
     "questions": [
       {
         "question": "question text",
-        "topic": ${techStack},
+        "topic": ${techStackValue},
         "subTopic": "Specific sub-topic here",
         "difficulty": "easy|medium|tough",
         "options:" [
@@ -52,7 +52,6 @@ export function generateInterviewPrompt({
       }
     ]
   
-  }`` Please continue to generate ${questionCount} such interview questions according to the structure and requirements provided.
-  The questions should be a ${QUESTION_FORMATS_MAP[questionFormat]}.`
-  }`;
+  }`
+   }`;
 }

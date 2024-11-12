@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { mockInterviewGenerate } from "@/lib/action";
 import { useUser } from "@clerk/nextjs";
-
+import { SkillsAutocomplete } from "./SkillsAutocomplete";
 import {
   DEFAULT_FORM_VALUES,
   QUESTION_FORMATS,
