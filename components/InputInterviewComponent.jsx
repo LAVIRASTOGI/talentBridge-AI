@@ -3,16 +3,17 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { mockInterviewGenerate } from "@/lib/action";
 import { useUser } from "@clerk/nextjs";
-import { SkillsAutocomplete } from "./SkillsAutocomplete";
+
 import {
   DEFAULT_FORM_VALUES,
   QUESTION_FORMATS,
   SKILL_LEVELS,
 } from "@/constant";
+import toast from "react-hot-toast";
 
 // Constants
 
-function InputInterviewComponent({ category, closeModal, setShowToast }) {
+function InputInterviewComponent({ category, closeModal }) {
   const [isPending, setIsPending] = useState(false);
   const { user } = useUser();
   const {
@@ -43,18 +44,13 @@ function InputInterviewComponent({ category, closeModal, setShowToast }) {
         await mockInterviewGenerate(null, data, {
           id: user?.id,
         });
-        setShowToast({
-          isShowToast: true,
-          type: "success",
-          message: "Interview data submitted successfully!",
-        });
+        toast.success("Form submitted successfully. Test is about to begin");
       } catch (error) {
         console.error("Error submitting form:", error);
-        setShowToast({
-          isShowToast: true,
-          type: "error",
-          message: "An error occurred while submitting the form.",
-        });
+        toast.error(
+          error.message ||
+            "Error occured While Starting Test. Please Try After Sometime"
+        );
       } finally {
         setIsPending(false);
       }

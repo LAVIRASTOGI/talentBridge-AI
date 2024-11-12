@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "TalentBridge - AI-Powered Mock Interviews & Quizzes",
@@ -43,6 +44,19 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className=" relative">
           <ThemeProvider>{children}</ThemeProvider>
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            toastOptions={{
+              // Define default options
+              className: "",
+              duration: 5000,
+              style: {
+                background: "#363636",
+                color: "#fff",
+              },
+            }}
+          />
         </body>
       </html>
     </ClerkProvider>
