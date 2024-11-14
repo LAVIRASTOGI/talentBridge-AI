@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { mockInterviewGenerate } from "@/lib/action";
-import { useUser } from "@clerk/nextjs";
+
 import { SkillsAutocomplete } from "./SkillsAutocomplete";
 import {
   DEFAULT_FORM_VALUES,
@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 
 function InputInterviewComponent({ category, closeModal }) {
   const [isPending, setIsPending] = useState(false);
-  const { user } = useUser();
+
   const {
     register,
     control,
@@ -42,7 +42,7 @@ function InputInterviewComponent({ category, closeModal }) {
       setIsPending(true);
       try {
         await mockInterviewGenerate(null, data, {
-          id: user?.id,
+          id: 123,
         });
         toast.success("Form submitted successfully. Test is about to begin");
       } catch (error) {

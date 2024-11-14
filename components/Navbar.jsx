@@ -1,5 +1,5 @@
 "use client";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+
 import MobileNav from "./MobileNav";
 import { sidebarLinks } from "@/constant";
 import { usePathname } from "next/navigation";
@@ -40,9 +40,6 @@ function Navbar() {
           })}
         </div>
         <div className="flex gap-4">
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           <ThemeSwitcher />
           <div className="lg:hidden">
             <MobileNav />

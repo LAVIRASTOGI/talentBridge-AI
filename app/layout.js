@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 
 export const metadata = {
@@ -33,32 +32,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider
-      appearance={{
-        layout: {
-          socialButtonsVariant: "iconButton",
-          logoImageUrl: "/icons/video.jpg",
-        },
-      }}
-    >
-      <html lang="en">
-        <body className=" relative">
-          <ThemeProvider>{children}</ThemeProvider>
-          <Toaster
-            position="top-right"
-            reverseOrder={false}
-            toastOptions={{
-              // Define default options
-              className: "",
-              duration: 5000,
-              style: {
-                background: "#363636",
-                color: "#fff",
-              },
-            }}
-          />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className=" relative">
+        <ThemeProvider>{children}</ThemeProvider>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 5000,
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          }}
+        />
+      </body>
+    </html>
   );
 }
