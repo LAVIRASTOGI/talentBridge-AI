@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Mock user data for demonstration
 const MOCK_USERS = {
@@ -12,6 +13,7 @@ const MOCK_USERS = {
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const router = useRouter();
 
   const {
     register,
@@ -35,6 +37,9 @@ export default function SignInPage() {
     return null;
   };
 
+  const handleSignupRedirect = () => {
+    router.push("/sign-up"); // Navigate to the signup page
+  };
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
@@ -51,6 +56,7 @@ export default function SignInPage() {
       }
 
       console.log("Login successful!");
+      router.push("/");
       // Add your successful login logic here
     } catch (error) {
       console.error("Login error:", error);
@@ -194,6 +200,7 @@ export default function SignInPage() {
                     type="button"
                     className="btn btn-outline border-primary text-primary hover:text-white hover:bg-primary rounded-xl"
                     disabled={isLoading}
+                    onClick={handleSignupRedirect}
                   >
                     SignUp
                   </button>
