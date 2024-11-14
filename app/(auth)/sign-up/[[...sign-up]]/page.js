@@ -3,10 +3,14 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useCallback, useMemo, useState } from "react";
 import { SkillsAutocomplete } from "@/components/SkillsAutocomplete";
+import { signUpHandler } from "@/lib/userAction";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const router = useRouter();
 
   const {
     register,
@@ -18,8 +22,8 @@ export default function SignUpPage() {
   } = useForm({
     defaultValues: {
       name: "",
-      email: "",
-      phone: "",
+      emailId: "",
+      phoneNumber: "",
       username: "",
       password: "",
       confirmPassword: "",
@@ -31,19 +35,19 @@ export default function SignUpPage() {
   const resetForm = useCallback(() => {
     reset();
   }, [reset]);
+
   const onSubmit = async (data) => {
+    setIsLoading(true);
+    setAuthError("");
     try {
-      setIsLoading(true);
-      setAuthError("");
-
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      console.log("Registration data:", data);
-      // Add your registration logic here
+      await signUpHandler(data);
+      toast.success("Form submitted successfully and user is Signed Up.");
+      router.push("/");
     } catch (error) {
-      console.error("Registration error:", error);
-      setAuthError("An unexpected error occurred. Please try again.");
+      console.error("Error submitting form:", error);
+      toast.error(
+        error.message || "Error occured While SignUp. Please Try After Sometime"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +102,7 @@ export default function SignUpPage() {
     required: "Email is required",
     pattern: {
       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      message: "Invalid email address",
+      message: "Invalid emailId address",
     },
   };
 
@@ -212,13 +216,13 @@ export default function SignUpPage() {
                   validation: nameValidation,
                 })}
 
-                {renderFormField("email", "Email Address", {
-                  inputType: "email",
-                  placeholder: "Enter your email",
+                {renderFormField("emailId", "Email Address", {
+                  inputType: "emailId",
+                  placeholder: "Enter your emailId",
                   validation: emailValidation,
                 })}
 
-                {renderFormField("phone", "Phone Number", {
+                {renderFormField("phoneNumber", "Phone Number", {
                   inputType: "tel",
                   placeholder: "Enter your phone number",
                   validation: phoneValidation,
@@ -228,6 +232,7 @@ export default function SignUpPage() {
                   placeholder: "Choose a username",
                   validation: usernameValidation,
                 })}
+                <SkillsAutocomplete control={control} name="skills" />
 
                 {renderFormField("password", "Password", {
                   inputType: "password",
@@ -246,7 +251,6 @@ export default function SignUpPage() {
                   placeholder: "Enter years of experience",
                   validation: experienceValidation,
                 })}
-                <SkillsAutocomplete control={control} name="skills" />
 
                 <div className="py-4 flex gap-4 justify-end">
                   <button
