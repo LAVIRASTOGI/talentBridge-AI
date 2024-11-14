@@ -150,10 +150,10 @@ function InputInterviewComponent({ category, closeModal }) {
 
         <SkillsAutocomplete control={control} name="skills" />
 
-        {renderRadioGroup("questionFormat", "Interview Question Format", {
+        {/* {renderRadioGroup("questionFormat", "Interview Question Format", {
           items: QUESTION_FORMATS,
           validation: { required: "Please select a question format" },
-        })}
+        })} */}
 
         {renderFormField(
           "description",

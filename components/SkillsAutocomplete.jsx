@@ -23,25 +23,10 @@ export const SkillsAutocomplete = ({ control, name }) => {
     setSuggestions(filtered);
   };
 
-  const handleKeyDown = (e, onChange, currentValue) => {
-    // Add custom skill when pressing Enter
-    if (e.key === "Enter" && inputValue.trim()) {
-      e.preventDefault();
-      if (!currentValue.includes(inputValue.trim())) {
-        onChange([...currentValue, inputValue.trim()]);
-        setInputValue("");
-        setSuggestions([]);
-      }
-    }
-  };
-
   return (
     <div className="form-control w-full">
       <label className="label font-bold">
         <span className="label-text">Skills Specialization</span>
-        <span className="label-text-alt text-gray-500">
-          Press Enter to add custom skills
-        </span>
       </label>
       <Controller
         name={name}
@@ -75,9 +60,8 @@ export const SkillsAutocomplete = ({ control, name }) => {
                 type="text"
                 value={inputValue}
                 onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, onChange, value)}
-                className="flex-1 outline-none min-w-[200px] p-2 "
-                placeholder="Type to search or add custom skills..."
+                className="flex-1 outline-none min-w-[200px] p-2"
+                placeholder="Type to search skills..."
               />
             </div>
 
@@ -100,24 +84,6 @@ export const SkillsAutocomplete = ({ control, name }) => {
                   </li>
                 ))}
               </ul>
-            )}
-
-            {/* Add Custom Skill Button */}
-            {inputValue.trim() && !suggestions.length && (
-              <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
-                <button
-                  type="button"
-                  className="w-full px-4 py-2 text-left hover:bg-secondary/10"
-                  onClick={() => {
-                    if (!value.includes(inputValue.trim())) {
-                      onChange([...value, inputValue.trim()]);
-                      setInputValue("");
-                    }
-                  }}
-                >
-                  Add "{inputValue}" as a custom skill
-                </button>
-              </div>
             )}
 
             {/* Error Message */}

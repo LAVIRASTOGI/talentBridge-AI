@@ -48,6 +48,6 @@ export const DEFAULT_FORM_VALUES = {
 };
 
 export const QUESTION_FORMATS_MAP = {
-  conceptual: "Mixture ofTechnical Concepts & Problem Solving",
+  conceptual: "Mixture of Problem Solving and Technical Concepts",
   multipleChoice: "Multiple Choice Questions (MCQs)",
 };
