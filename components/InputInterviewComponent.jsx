@@ -54,8 +54,8 @@ function InputInterviewComponent({ category, closeModal }) {
       } finally {
         setIsPending(false);
       }
-    },
-    [user?.id]
+    }
+    // [user?.id]
   );
 
   const renderFormField = useMemo(
