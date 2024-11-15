@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { UserProvider } from "@/util/userContext";
 
 export const metadata = {
   title: "TalentBridge - AI-Powered Mock Interviews & Quizzes",
@@ -33,21 +34,23 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className=" relative">
-        <ThemeProvider>{children}</ThemeProvider>
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-          toastOptions={{
-            // Define default options
-            className: "",
-            duration: 5000,
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-          }}
-        />
+      <body className="relative">
+        <UserProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            toastOptions={{
+              // Define default options
+              className: "",
+              duration: 5000,
+              style: {
+                background: "#363636",
+                color: "#fff",
+              },
+            }}
+          />
+        </UserProvider>
       </body>
     </html>
   );
