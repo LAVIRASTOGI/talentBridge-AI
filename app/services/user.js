@@ -25,3 +25,34 @@ export const signupUser = async (data) => {
     };
   }
 };
+
+export const signInUser = async (data) => {
+  try {
+    const response = await axiosInstance.post("/signin", data, {
+      withCredentials: "include",
+      headers: {
+        "Access-Control-Allow-Credentials": true,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.error ||
+      error.message ||
+      "An unexpected error occurred during signin";
+
+    console.error("Error signing up:", {
+      message: errorMessage,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+
+    // Return a structured error response
+    return {
+      success: false,
+      error: errorMessage,
+      status: error.response?.status,
+    };
+  }
+};

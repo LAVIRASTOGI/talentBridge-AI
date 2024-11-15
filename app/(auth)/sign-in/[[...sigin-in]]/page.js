@@ -3,12 +3,8 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-
-// Mock user data for demonstration
-const MOCK_USERS = {
-  lavi: { password: "lavi", username: "lavi" },
-  admin: { password: "Admin@123", username: "admin" },
-};
+import { signInHandler } from "@/lib/userAction";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,41 +22,22 @@ export default function SignInPage() {
     },
   });
 
-  const validateCredentials = (email, password) => {
-    const user = MOCK_USERS[email];
-    if (!user) {
-      return "Invalid email or username";
-    }
-    if (user.password !== password) {
-      return "Invalid password";
-    }
-    return null;
-  };
-
   const handleSignupRedirect = () => {
     router.push("/sign-up"); // Navigate to the signup page
   };
+
   const onSubmit = async (data) => {
+    setIsLoading(true);
+    setAuthError("");
     try {
-      setIsLoading(true);
-      setAuthError("");
-
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const error = validateCredentials(data.email_username, data.password);
-
-      if (error) {
-        setAuthError(error);
-        return;
-      }
-
-      console.log("Login successful!");
+      await signInHandler(data);
+      toast.success("User is Signed In.");
       router.push("/");
-      // Add your successful login logic here
     } catch (error) {
-      console.error("Login error:", error);
-      setAuthError("An unexpected error occurred. Please try again.");
+      console.error("Error submitting form:", error);
+      toast.error(
+        error.message || "Error occured While SignIn. Please Try After Sometime"
+      );
     } finally {
       setIsLoading(false);
     }
