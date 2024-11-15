@@ -32,7 +32,16 @@ export default function SignInPage() {
     try {
       await signInHandler(data);
       toast.success("User is Signed In.");
-      router.push("/");
+      const searchParams = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParams.get("callbackUrl");
+
+      if (callbackUrl) {
+        // If there's a callback URL (from middleware redirect), go there
+        router.push(callbackUrl);
+      } else {
+        // Otherwise, go to home page
+        router.push("/");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(

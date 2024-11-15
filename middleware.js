@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
+  const { pathname } = request.nextUrl;
   const token = request.cookies.get("token")?.value;
   if (!token) {
     // Handle unauthorized access
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    const url = request.nextUrl.clone();
+    url.pathname = "/sign-in";
+    url.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
