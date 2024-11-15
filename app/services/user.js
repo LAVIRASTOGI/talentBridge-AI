@@ -29,10 +29,7 @@ export const signupUser = async (data) => {
 export const signInUser = async (data) => {
   try {
     const response = await axiosInstance.post("/signin", data, {
-      withCredentials: "include",
-      headers: {
-        "Access-Control-Allow-Credentials": true,
-      },
+      withCredentials: "true",
     });
 
     return response.data;
