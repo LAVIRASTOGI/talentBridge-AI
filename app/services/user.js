@@ -29,7 +29,7 @@ export const signupUser = async (data) => {
 export const signInUser = async (data) => {
   try {
     const response = await axiosInstance.post("/signin", data, {
-      withCredentials: "true",
+      withCredentials: "include",
     });
 
     return response.data;
